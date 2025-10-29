@@ -84,7 +84,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 List<Text> messageWidgets = [];
 
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
                 }
 
                 final messages = snapshot.data!.docs;
@@ -122,6 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
+
                   TextButton(
                     onPressed: () {
                       _firestore.collection("messages").add({

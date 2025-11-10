@@ -104,10 +104,10 @@ class _signinScreenState extends State<signinScreen> {
                       email: email,
                       password: password,
                     );
-                    Navigator.pushNamed(context, ChatScreen.screenRoute);
                     setState(() {
                       loading = false;
                     });
+                    Navigator.pushNamed(context, ChatScreen.screenRoute);
                   } catch (e) {
                     print(e);
                   }

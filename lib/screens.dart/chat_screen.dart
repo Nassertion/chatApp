@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firestore = FirebaseFirestore.instance;
+late User signedInuser; // this will give us the email
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -15,7 +16,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final messagetextcontroller = TextEditingController();
-  late User signedInuser; // this will give us the email
   String? messagetext; // this will give us the message
 
   @override
@@ -135,31 +135,47 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessageLine extends StatelessWidget {
-  const MessageLine({this.sender, this.text, super.key});
+  const MessageLine({this.sender, this.text, required this.isMe, super.key});
 
   final String? sender;
   final String? text;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Text(
             "$sender",
-            style: TextStyle(fontSize: 12, color: Colors.black45),
+            style: TextStyle(fontSize: 12, color: Colors.yellow[900]),
           ),
           Material(
             elevation: 5,
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.blue[800],
+            borderRadius: isMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  )
+                : BorderRadius.only(
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+            color: isMe ? Colors.blue[800] : Colors.white,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Text(
                 "$text",
-                style: TextStyle(fontSize: 15, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 15,
+                  color: isMe ? Colors.white : Colors.black87,
+                ),
               ),
             ),
           ),
@@ -189,11 +205,13 @@ class MessageStreamBuilder extends StatelessWidget {
         final messages = snapshot.data!.docs;
         for (var message in messages) {
           final messageText = message.get("text");
-          print(messageText);
           final messageSender = message.get("sender");
+          final currentUser = signedInuser.email;
+
           final messageWidget = MessageLine(
             sender: messageSender,
             text: messageText,
+            isMe: currentUser == messageSender,
           );
           messageWidgets.add(messageWidget);
         }

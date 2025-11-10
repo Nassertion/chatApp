@@ -44,13 +44,13 @@ class _ChatScreenState extends State<ChatScreen> {
   //   }
   // }
 
-  void messageStreams() async {
-    await for (var snapshot in _firestore.collection("messages").snapshots()) {
-      for (var messgaes in snapshot.docs) {
-        print(messgaes.data());
-      }
-    }
-  }
+  // void messageStreams() async {
+  //   await for (var snapshot in _firestore.collection("messages").snapshots()) {
+  //     for (var messgaes in snapshot.docs) {
+  //       print(messgaes.data());
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +67,9 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              // _auth.signOut();
-              // Navigator.pop(context);
-              messageStreams();
+              _auth.signOut();
+              Navigator.pop(context);
+              // messageStreams();
             },
             icon: Icon(Icons.exit_to_app, color: Colors.white),
           ),
@@ -113,6 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection("messages").add({
                         'text': messagetext,
                         'sender': signedInuser.email,
+                        'time': FieldValue.serverTimestamp(),
                       });
                     },
                     child: Text(
@@ -192,7 +193,7 @@ class MessageStreamBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection("messages").snapshots(),
+      stream: _firestore.collection("messages").orderBy("time").snapshots(),
       builder: (context, snapshot) {
         List<MessageLine> messageWidgets = [];
 
@@ -202,7 +203,7 @@ class MessageStreamBuilder extends StatelessWidget {
           );
         }
 
-        final messages = snapshot.data!.docs;
+        final messages = snapshot.data!.docs.reversed;
         for (var message in messages) {
           final messageText = message.get("text");
           final messageSender = message.get("sender");
@@ -218,6 +219,7 @@ class MessageStreamBuilder extends StatelessWidget {
 
         return Expanded(
           child: ListView(
+            reverse: true,
             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             children: messageWidgets,
           ),

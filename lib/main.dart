@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         WelcomeScreen.screenRoute: (context) => WelcomeScreen(),
         RegisterScreen.screenRoute: (context) => RegisterScreen(),
-        signinScreen.screenRoute: (context) => signinScreen(),
+        SigninScreen.screenRoute: (context) => SigninScreen(),
         ChatScreen.screenRoute: (context) => ChatScreen(),
       },
     );

@@ -183,7 +183,6 @@ class MessageLine extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
 

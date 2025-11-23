@@ -30,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
             Mybutton(
               title: "sign in",
               onPressed: () {
-                Navigator.pushNamed(context, signinScreen.screenRoute);
+                Navigator.pushNamed(context, SigninScreen.screenRoute);
               },
               color: Colors.yellow[900]!,
             ),

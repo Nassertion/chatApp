@@ -1,6 +1,6 @@
 # Real-Time Chat Application 💬🔥
 
-A lightweight, clean mobile chat application built with Flutter to demonstrate secure user authentication and real-time messaging capabilities.
+A lightweight,very simple and clean mobile chat application built with Flutter to demonstrate secure user authentication and real-time messaging capabilities ,for learning how firebase works
 ---
 
 ## 🎯 Project Purpose
